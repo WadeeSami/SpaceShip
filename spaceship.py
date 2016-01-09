@@ -9,6 +9,7 @@ HEIGHT = 600
 score = 0
 lives = 3
 time = 0
+friction = 0.0508
 class ImageInfo:
     def __init__(self, center, size, radius = 0, lifespan = None, animated = False):
         self.center = center
@@ -73,7 +74,7 @@ missile_sound = simplegui.load_sound("http://commondatastorage.googleapis.com/co
 missile_sound.set_volume(.5)
 ship_thrust_sound = simplegui.load_sound("http://commondatastorage.googleapis.com/codeskulptor-assets/sounddogs/thrust.mp3")
 explosion_sound = simplegui.load_sound("http://commondatastorage.googleapis.com/codeskulptor-assets/sounddogs/explosion.mp3")
-
+ship_thrust_sound.set_volume(1)
 # alternative upbeat soundtrack by composer and former IIPP student Emiel Stopler
 # please do not redistribute without permission from Emiel at http://www.filmcomposer.nl
 #soundtrack = simplegui.load_sound("https://storage.googleapis.com/codeskulptor-assets/ricerocks_theme.mp3")
@@ -109,15 +110,17 @@ class Ship:
         self.angle += self.angle_vel
         if self.thrust: #change the image center to draw it with thrusts
             self.image_center = [135, 45]
-            self.vel[0] += forward[0]
+            self.vel[0] += forward[0]  
             self.vel[1] += forward[1]
+            ship_thrust_sound.play()
         else:
             self.image_center = [45, 45]
+            ship_thrust_sound.pause()
         # should update the position and the velocity
         self.pos[0] = (self.vel[0] + self.pos[0]) % WIDTH
         self.pos[1] = (self.vel[1] + self.pos[1]) % HEIGHT
-        
-        
+        self.vel[0] *= (1-friction)
+        self.vel[1] *= (1-friction)
         
     
 # Sprite class
@@ -139,8 +142,8 @@ class Sprite:
             sound.play()
    
     def draw(self, canvas):
-        canvas.draw_circle(self.pos, self.radius, 1, "Red", "Red")
-    
+        #canvas.draw_circle(self.pos, self.radius, 1, "Red", "Red")
+        canvas.draw_image(self.image, self.image_center,self.image_size ,self.pos , self.image_size , self.angle )
     def update(self):
         pass        
 
@@ -169,7 +172,9 @@ def draw(canvas):
             
 # timer handler that spawns a rock    
 def rock_spawner():
-    pass
+    #create a random location for the sprite each second
+    a_rock.pos[0] = random.randrange(0 , WIDTH - a_rock.radius)
+    a_rock.pos[1] = random.randrange(0 , HEIGHT - a_rock.radius)
     
 #function to handle key inputs and to control the orientation of the ship
 def key_down(key):
