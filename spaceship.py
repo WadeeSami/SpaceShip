@@ -9,7 +9,6 @@ HEIGHT = 600
 score = 0
 lives = 3
 time = 0
-
 class ImageInfo:
     def __init__(self, center, size, radius = 0, lifespan = None, animated = False):
         self.center = center
@@ -102,10 +101,24 @@ class Ship:
         
     def draw(self,canvas):
         #canvas.draw_circle(self.pos, self.radius, 1, "White", "White")
-        canvas.draw_image(self.image, self.image_center,self.image_size ,self.pos,self.image_size , self.angle )
+        canvas.draw_image(self.image, self.image_center,self.image_size ,self.pos , self.image_size , self.angle )
+        
+        
     def update(self):
+        forward = angle_to_vector(self.angle)
         self.angle += self.angle_vel
-    
+        if self.thrust: #change the image center to draw it with thrusts
+            self.image_center = [135, 45]
+            self.vel[0] += forward[0]
+            self.vel[1] += forward[1]
+        else:
+            self.image_center = [45, 45]
+        # should update the position and the velocity
+        self.pos[0] = (self.vel[0] + self.pos[0]) % WIDTH
+        self.pos[1] = (self.vel[1] + self.pos[1]) % HEIGHT
+        
+        
+        
     
 # Sprite class
 class Sprite:
@@ -164,10 +177,14 @@ def key_down(key):
         my_ship.angle_vel -= 0.2
     elif key == simplegui.KEY_MAP['right']:
         my_ship.angle_vel += 0.2
-        
+    elif key == simplegui.KEY_MAP['up']:    
+        my_ship.thrust = True   
+    #elif key == simplegui.KEY_MAP['down']:    
+        #my_ship.thrust = False
 # a function to handle unusing key
 def key_up(key):
     my_ship.angle_vel = 0
+    my_ship.thrust = False
 # initialize frame
 frame = simplegui.create_frame("Asteroids", WIDTH, HEIGHT)
 
