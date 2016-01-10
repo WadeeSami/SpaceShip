@@ -170,7 +170,10 @@ def draw(canvas):
     canvas.draw_image(nebula_image, nebula_info.get_center(), nebula_info.get_size(), [WIDTH / 2, HEIGHT / 2], [WIDTH, HEIGHT])
     canvas.draw_image(debris_image, center, size, (wtime - WIDTH / 2, HEIGHT / 2), (WIDTH, HEIGHT))
     canvas.draw_image(debris_image, center, size, (wtime + WIDTH / 2, HEIGHT / 2), (WIDTH, HEIGHT))
-    #canvas.draw_text("score")
+    canvas.draw_text("Lives"  , [10 , 30] , 30 ,"white")
+    canvas.draw_text( str(lives) , [10 , 70] , 30 ,"white")
+    canvas.draw_text("Score"  , [700 , 30] , 30 ,"white")
+    canvas.draw_text( str(score) , [700 , 70] , 30 ,"white")
     # draw ship and sprites
     my_ship.draw(canvas)
     a_rock.draw(canvas)
