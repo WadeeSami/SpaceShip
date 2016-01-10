@@ -122,8 +122,16 @@ class Ship:
         self.vel[0] *= (1-friction)
         self.vel[1] *= (1-friction)
         
-    
-# Sprite class
+    def shoot(self):#this method should spawn a new missile
+        global a_missile
+        forward = angle_to_vector(self.angle)
+        missile_sound.play()
+        a_missile.pos[0] = self.pos[0] + forward[0]*self.radius 
+        a_missile.pos[1] = self.pos[1] + forward[1]*self.radius 
+        a_missile.vel[0] = my_ship.vel[0] + 3 * forward[0]
+        a_missile.vel[1] = my_ship.vel[1] + 3 * forward[1]
+        print a_missile.pos
+        
 class Sprite:
     def __init__(self, pos, vel, ang, ang_vel, image, info, sound = None):
         self.pos = [pos[0],pos[1]]
@@ -137,16 +145,17 @@ class Sprite:
         self.lifespan = info.get_lifespan()
         self.animated = info.get_animated()
         self.age = 0
-        if sound:
-            sound.rewind()
-            sound.play()
+        #if sound:
+         #   sound.rewind()
+         #   sound.play()
    
     def draw(self, canvas):
         #canvas.draw_circle(self.pos, self.radius, 1, "Red", "Red")
         canvas.draw_image(self.image, self.image_center,self.image_size ,self.pos , self.image_size , self.angle )
     def update(self):
-        pass        
-
+        self.pos[0] = (self.vel[0] + self.pos[0])
+        self.pos[1] = (self.vel[1] + self.pos[1])
+        #pass
            
 def draw(canvas):
     global time
@@ -186,6 +195,9 @@ def key_down(key):
         my_ship.thrust = True   
     #elif key == simplegui.KEY_MAP['down']:    
         #my_ship.thrust = False
+    elif key == simplegui.KEY_MAP['space']:    
+        my_ship.shoot() 
+        
 # a function to handle unusing key
 def key_up(key):
     my_ship.angle_vel = 0
