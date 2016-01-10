@@ -153,9 +153,11 @@ class Sprite:
         #canvas.draw_circle(self.pos, self.radius, 1, "Red", "Red")
         canvas.draw_image(self.image, self.image_center,self.image_size ,self.pos , self.image_size , self.angle )
     def update(self):
-        self.pos[0] = (self.vel[0] + self.pos[0])
-        self.pos[1] = (self.vel[1] + self.pos[1])
-        #pass
+        #self.pos[0] = (self.vel[0] + self.pos[0])
+        #self.pos[1] = (self.vel[1] + self.pos[1])
+        a_missile.pos[0] = (a_missile.vel[0] + a_missile.pos[0])
+        a_missile.pos[1] = (a_missile.vel[1] + a_missile.pos[1])
+        pass
            
 def draw(canvas):
     global time
@@ -168,7 +170,7 @@ def draw(canvas):
     canvas.draw_image(nebula_image, nebula_info.get_center(), nebula_info.get_size(), [WIDTH / 2, HEIGHT / 2], [WIDTH, HEIGHT])
     canvas.draw_image(debris_image, center, size, (wtime - WIDTH / 2, HEIGHT / 2), (WIDTH, HEIGHT))
     canvas.draw_image(debris_image, center, size, (wtime + WIDTH / 2, HEIGHT / 2), (WIDTH, HEIGHT))
-
+    #canvas.draw_text("score")
     # draw ship and sprites
     my_ship.draw(canvas)
     a_rock.draw(canvas)
@@ -188,9 +190,9 @@ def rock_spawner():
 #function to handle key inputs and to control the orientation of the ship
 def key_down(key):
     if key == simplegui.KEY_MAP['left']:
-        my_ship.angle_vel -= 0.2
+        my_ship.angle_vel -= 0.1
     elif key == simplegui.KEY_MAP['right']:
-        my_ship.angle_vel += 0.2
+        my_ship.angle_vel += 0.1
     elif key == simplegui.KEY_MAP['up']:    
         my_ship.thrust = True   
     #elif key == simplegui.KEY_MAP['down']:    
